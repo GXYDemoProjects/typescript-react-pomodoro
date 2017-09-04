@@ -3,7 +3,7 @@
 
 - [x] Add scss support
 - [x] Basic skeleton
-- [ ] Add normalize.css to make consistency between browsers
+- [x] Add normalize.css to make consistency between browsers
 - [ ] basic css
 - [ ] Reponsive design
 - [ ] Timer
@@ -11,3 +11,4 @@
 - [ ] Notification and sound play
 - [ ] Offline PWA
 - [ ] Add github corner
+- [ ] Add unit test
