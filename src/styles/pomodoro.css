@@ -1,2 +1,73 @@
+.Pomodoro {
+  width: 100%;
+  margin: 30px auto; }
+
 .display {
-  font-size: 20px; }
+  cursor: pointer;
+  width: 100%;
+  margin: 30px auto;
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border: #1082A5 solid 5px;
+  border-radius: 50%; }
+  .display:before {
+    box-sizing: border-box;
+    content: "";
+    position: absolute;
+    width: 138.56px;
+    height: 80px;
+    left: 144.64px;
+    top: 50%;
+    border-left: #1082A5 69.28px solid;
+    border-top: transparent 40px solid;
+    border-bottom: transparent 40px solid;
+    transform: translateX(-50%) translateY(-50%); }
+
+.display-time {
+  font-size: 40px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: 0;
+  transform: translateX(-50%) translateY(-50%); }
+
+.control-panel {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center; }
+
+.control {
+  outline: none;
+  flex: 1 1 200px; }
+  .control .wrapper {
+    display: inline-block;
+    vertical-align: middle; }
+  .control button {
+    width: 40px;
+    vertical-align: middle;
+    height: 30px;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    background: #1082A5;
+    transition: all 0.5s ease-in; }
+  .control button:hover {
+    background: #127492; }
+  .control input[type="text"] {
+    border: none;
+    width: 40px;
+    padding: 0;
+    text-align: center;
+    line-height: 30px;
+    font-size: 15px; }
+  .control .control-decrease {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px; }
+  .control .control-increase {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px; }
+  .control p {
+    font-size: 15px; }

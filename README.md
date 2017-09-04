@@ -4,7 +4,7 @@
 - [x] Add scss support
 - [x] Basic skeleton
 - [x] Add normalize.css to make consistency between browsers
-- [ ] basic css
+- [x] basic css
 - [ ] Reponsive design
 - [ ] Timer
 - [ ] Timing bar animation
