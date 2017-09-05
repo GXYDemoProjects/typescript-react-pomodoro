@@ -69,6 +69,7 @@
   .control .hidden {
     display: none; }
   .control .wrapper {
+    height: 30px;
     display: inline-block;
     vertical-align: middle; }
   .control button {
@@ -79,6 +80,7 @@
     border: none;
     width: 40px;
     padding: 0;
+    vertical-align: middle;
     text-align: center;
     line-height: 30px;
     font-size: 15px; }

@@ -87,6 +87,7 @@ $display-height: 200px;
     display: none;
   }
   .wrapper {
+    height: 30px;
     display: inline-block;
     vertical-align: middle;
   }
@@ -100,6 +101,7 @@ $display-height: 200px;
     border: none;
     width: 40px;
     padding: 0;
+    vertical-align: middle;
     text-align: center;
     line-height: 30px;
     font-size: 15px;
