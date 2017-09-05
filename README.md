@@ -1,5 +1,4 @@
 ## TODO
----
 
 - [x] Add scss support
 - [x] Basic skeleton

@@ -1,73 +1,319 @@
 import * as React from 'react';
 import '../../styles/pomodoro.css';
 
-function DisplayClock(props: {time: string}) {
+export interface ClickFunc {
+  (event: any): void;
+}
+export interface TimeProperty {
+  time: string;
+  play: boolean;
+  handleClick: ClickFunc;
+  type: string;
+}
+
+function DisplayPanel(props: TimeProperty) {
   return (
-    <div className="display display-clock">
-      <p className="display-time">{props.time}</p>
+    <div className={'display display-clock ' + props.type} onClick={props.handleClick}>
+      <p className={'display-time ' + (props.play ? 'show' : 'hide')}>{props.time}</p>
+      <div className={'icon icon-play ' + (props.play ? 'hide' : 'show')} />
     </div>
   );
 }
 
-interface IncDecButtonType {
-  property: {
-    minLength: number,
-    maxLength: number,
-    name: string,
-    text: string,
-    initLen: number,
-  };
+export interface UpdateFunc {
+  (value: {key: string, len: number}): void;
+}
+export interface IncDecButtonProperty {
+  minLength: number;
+  maxLength: number;
+  type: string;
+  initLen: number;
 }
 
-function IncDecButton(props: IncDecButtonType) {
-  const property = props.property;
-  return (
-    <div className="control">
-      <div className="wrapper">
-        <button className="control-decrease">-</button>
-      </div>
-      <div className="wrapper">
-        <input type="text" name={property.name} id={property.name} placeholder={property.initLen.toString()}/>
-      </div>
-      <div className="wrapper">
-        <button className="control-increase">+</button>
-      </div>
-      <p className="control-text">{property.text}</p>
-    </div>
-  );
+export interface IncDecButtonProps {
+  property: IncDecButtonProperty;
+  update: UpdateFunc;  
+}
+export interface IncDecButtonState {
+  len: number;
+  validation: boolean;
 }
 
-class Pomodoro extends React.Component {
+export class IncDecButton extends React.Component<IncDecButtonProps, IncDecButtonState> {
   constructor() {
     super();
+    this.state = {
+      len: 0,
+      validation: true,
+    };
+    this.onChange = this.onChange.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+    this.increaseClick = this.increaseClick.bind(this);
+    this.decreaseClick = this.decreaseClick.bind(this);
+  }
+  componentWillMount() {
+    this.setState({
+      len: this.props.property.initLen,
+    });
+  }
+  validate(value: string, minLen: number, maxLen: number) {
+    const validation = /^\d+$/.test(value) && Number.parseInt(value, 10) >= minLen
+                      && Number.parseInt(value, 10)  <= maxLen;
+    if (!validation) {
+      this.setState({validation: false});
+    } else {
+      const key = `${this.props.property.type}Len`;
+      const len = Number.parseInt(value, 10);
+      const values = {key: key, len: len};
+      this.setState({validation: true, len: len}, () => this.props.update(values));
+      }
+    }
+
+  increaseClick(event: any) {
+    event.preventDefault();
+    if (this.state.validation) {
+      const len = this.state.len;
+      this.setState(
+      {
+        len: len < this.props.property.maxLength ? len + 1 : this.props.property.maxLength, 
+      }, 
+      () => {
+        const key = `${this.props.property.type}Len`;
+        const values = { key: key, len: this.state.len};
+        this.props.update(values);
+      });
+    }
+  }
+
+  decreaseClick(event: any) {
+    event.preventDefault();
+    if (this.state.validation) {
+      const len = this.state.len;
+      this.setState(
+      {
+        len: len > this.props.property.minLength ? len - 1 : this.props.property.minLength ,
+      },
+      () => {
+        const key = `${this.props.property.type}Len`;
+        const values = { key: key, len: this.state.len};
+        this.props.update(values);
+      });
+    }
+  }
+
+  onChange(event: any) {
+    event.preventDefault();
+    const value = (event.target as HTMLInputElement).value;
+    this.validate(value, this.props.property.minLength, this.props.property.maxLength);
+  }
+
+  onBlur(event: any) {
+    event.preventDefault();
+    this.setState({validation: true});
   }
 
   render() {
-    const breakButton = {
+    const show = this.state.validation ? 'hidden' : 'show';
+    const value = this.state.len;
+    const len = value ? value : this.props.property.initLen;
+    const type = this.props.property.type;
+    const text = type[0].toUpperCase() + type.slice(1);
+    return (
+      <div className="control">
+        <p className={show}>Time should be interger and between 
+          {this.props.property.minLength} - {this.props.property.maxLength}</p>
+        <div className="wrapper">
+          <button className="control-decrease" onClick={this.decreaseClick}>-</button>
+        </div>
+        <div className="wrapper">
+          <input type="text" value={len.toString()} onChange={this.onChange} onBlur={this.onBlur}/>
+        </div>
+        <div className="wrapper">
+          <button className="control-increase" onClick={this.increaseClick}>+</button>
+        </div>
+        <p className="control-text">{text} Length</p>
+      </div>
+    );
+  }
+}
+
+export interface SaveFunction {
+  (values: {sessionLen: number, breakLen: number}): void;
+}
+
+export interface ControlProperty {
+  breakProperty: IncDecButtonProperty;
+  sessionProperty: IncDecButtonProperty;
+  save: SaveFunction;
+}
+export interface ControlState {
+  sessionLen: number;
+  breakLen: number;
+}
+class ControlPanel extends React.Component <ControlProperty, ControlState> {
+  constructor() {
+    super();
+    this.state = {
+      sessionLen: 25,
+      breakLen: 5,
+    };
+    this.update = this.update.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+  componentWillMount() {
+    this.setState({
+      sessionLen: this.props.sessionProperty.initLen,
+      breakLen: this.props.breakProperty.initLen,
+    });
+  }
+  handleClick() {
+    this.props.save({
+      sessionLen: this.state.sessionLen, 
+      breakLen: this.state.breakLen,
+    });
+  }
+  update(value: {key: string, len: number}) {
+    const state = this.state;
+    state[value.key] = value.len;
+    this.setState(state);
+  }
+  
+  render() {
+    const props = this.props;
+    return (
+      <div className="control-panel">
+        <div className="control-panel-button">
+        <IncDecButton property={props.breakProperty} update={this.update}/>
+        <IncDecButton property={props.sessionProperty} update={this.update}/>
+        </div>
+        <button className="control-save" onClick={this.handleClick}>Restart</button>
+      </div>
+    );
+  }
+}
+
+export interface PomodoroState {
+  sessionLen: number;
+  breakLen: number;
+  time: number;
+  play: boolean;
+  type: string;
+}
+class Pomodoro extends React.Component<{}, PomodoroState> {
+  constructor() {
+    super();
+    this.state = {
+      sessionLen: 25,
+      breakLen: 5,
+      time: 0,
+      play: false,
+      type: 'session',
+    };
+    this.timeFormat = this.timeFormat.bind(this);
+    this.save = this.save.bind(this);
+    this.togglePlay = this.togglePlay.bind(this);
+    this.timer = this.timer.bind(this);
+  }
+
+  private timerId: number;
+  componentDidMount() {
+    // localStorage
+    this.setState({
+      time: 25 * 60,
+    });
+  }
+
+  timeFormat(time: number): string {
+    let minutes = Math.floor(time / 60).toString();
+    minutes = minutes.length === 1 ? `0${minutes}` : minutes;
+    let seconds = (time % 60).toString();
+    seconds = seconds.length === 1 ? `0${seconds}` : seconds;
+    return `${minutes}:${seconds}`;
+  }
+
+  timer() {
+    let time = this.state.time;
+    let play = this.state.play;
+    if (time === 0) {
+      this.expireTimer();
+    } else if (!play) {
+      this.setState({play: true}, () => this.timer());
+    } else {      
+      this.setState({time: time - 1});  
+      this.timerId = window.setTimeout(this.timer, 1000); 
+    }    
+  }
+  startTimer(time: number) {
+    this.setState({time: time}, () => this.timer());
+  } 
+  stopTimer() {
+    this.setState({play: false});
+    if (this.timerId) {
+      clearTimeout(this.timerId);
+    }
+  }
+
+  resetTimer() {
+    this.stopTimer();
+    const len = this.state.sessionLen * 60;
+    this.setState({
+      time: len,
+      play: false,
+      type: 'session',
+    });
+  }
+  expireTimer() {
+    if (this.state.type === 'session') {
+      // this.alert() ;
+      this.setState({
+        play: false,
+        type: 'break',
+        time: this.state.breakLen * 60,
+      });
+    } else {
+      // this.alert() ;
+      this.resetTimer();
+    }
+  }
+
+  togglePlay(event: any) {
+    event.preventDefault();
+    let play = this.state.play;
+    if (play === true) {
+      this.stopTimer();
+    } else {
+      this.startTimer(this.state.time);
+    }
+  }
+
+  save(values: {sessionLen: number, breakLen: number}) {
+    this.setState({sessionLen: values.sessionLen, breakLen: values.breakLen}, () => this.resetTimer());
+    
+  }
+
+  render() {
+    const state = this.state;
+    const time = state.time;
+    const breakProperty = {
       minLength: 1,
       maxLength: 30,
-      name: 'breakLength',
-      text: 'Break Length',
-      initLen: 5,
+      type: 'break',
+      initLen: state.breakLen,
     };
-    const sessionButton = {
+    const sessionProperty = {
       minLength: 1,
       maxLength: 60,
-      name: 'sessionLength',
-      text: 'Session Length',
-      initLen: 25,
+      type: 'session',
+      initLen: state.sessionLen,
     };
+
     return (
       <div className="Pomodoro">
         <div className="Pomodoro-header">
           <h2>Pomodoro Clock</h2>
         </div>
-        <DisplayClock time="00:00"/>
-        <div className="control-panel">
-        <IncDecButton property={breakButton}/>
-        <IncDecButton property={sessionButton}/>
-        </div>
-
+        <DisplayPanel time={this.timeFormat(time)} play={state.play} handleClick={this.togglePlay} type={state.type}/>
+        <ControlPanel breakProperty={breakProperty} sessionProperty={sessionProperty} save={this.save} />
       </div>
     );
   }

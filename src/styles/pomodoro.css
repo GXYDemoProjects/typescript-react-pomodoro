@@ -11,51 +11,70 @@
   height: 200px;
   border: #1082A5 solid 5px;
   border-radius: 50%; }
-  .display:before {
+  .display.break {
+    border-color: #EF576F; }
+  .display .icon {
     box-sizing: border-box;
-    content: "";
     position: absolute;
-    width: 138.56px;
     height: 80px;
-    left: 144.64px;
     top: 50%;
+    transform: translateX(-50%) translateY(-50%); }
+  .display .icon-play {
+    width: 138.56px;
+    left: 144.64px;
     border-left: #1082A5 69.28px solid;
     border-top: transparent 40px solid;
-    border-bottom: transparent 40px solid;
+    border-bottom: transparent 40px solid; }
+  .display .show {
+    visibility: visible; }
+  .display .hide {
+    visibility: hidden; }
+  .display .display-time {
+    font-size: 40px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: 0;
     transform: translateX(-50%) translateY(-50%); }
 
-.display-time {
-  font-size: 40px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin: 0;
-  transform: translateX(-50%) translateY(-50%); }
+.Pomodoro button {
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background: #1082A5;
+  padding: 0;
+  font-size: 15px;
+  transition: all 0.5s ease-in; }
+  .Pomodoro button:hover {
+    background: #127492; }
 
-.control-panel {
+.control-panel .control-panel-button {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center; }
 
+.control-panel .control-save {
+  width: 200px;
+  height: 30px;
+  border-radius: 2px; }
+
 .control {
   outline: none;
-  flex: 1 1 200px; }
+  flex: 1 1 120px; }
+  .control .show {
+    font-size: 10px;
+    color: red; }
+  .control .hidden {
+    display: none; }
   .control .wrapper {
     display: inline-block;
     vertical-align: middle; }
   .control button {
     width: 40px;
     vertical-align: middle;
-    height: 30px;
-    padding: 0;
-    border: none;
-    cursor: pointer;
-    background: #1082A5;
-    transition: all 0.5s ease-in; }
-  .control button:hover {
-    background: #127492; }
+    height: 30px; }
   .control input[type="text"] {
     border: none;
     width: 40px;
