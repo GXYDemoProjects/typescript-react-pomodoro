@@ -203,9 +203,14 @@ export interface PomodoroState {
 class Pomodoro extends React.Component<{}, PomodoroState> {
   constructor() {
     super();
+    let sessionLen: string | number | null = localStorage.getItem('sessionLen');
+    let breakLen: string | number | null = localStorage.getItem('breakLen');
+    sessionLen = sessionLen ? Number.parseInt(sessionLen, 10) : 25;
+    breakLen = breakLen ? Number.parseInt(breakLen, 10) : 5;
+
     this.state = {
-      sessionLen: 25,
-      breakLen: 5,
+      sessionLen: sessionLen,
+      breakLen: breakLen,
       time: 0,
       play: false,
       type: 'session',
@@ -218,10 +223,8 @@ class Pomodoro extends React.Component<{}, PomodoroState> {
 
   private timerId: number;
   componentDidMount() {
-    // localStorage
-    this.setState({
-      time: 25 * 60,
-    });
+    // Notification
+    Notification.requestPermission();
   }
 
   timeFormat(time: number): string {
@@ -265,14 +268,14 @@ class Pomodoro extends React.Component<{}, PomodoroState> {
   }
   expireTimer() {
     if (this.state.type === 'session') {
-      // this.alert() ;
+      this.alert('session') ;
       this.setState({
         play: false,
         type: 'break',
         time: this.state.breakLen * 60,
       });
     } else {
-      // this.alert() ;
+      this.alert('break') ;
       this.resetTimer();
     }
   }
@@ -288,8 +291,39 @@ class Pomodoro extends React.Component<{}, PomodoroState> {
   }
 
   save(values: {sessionLen: number, breakLen: number}) {
-    this.setState({sessionLen: values.sessionLen, breakLen: values.breakLen}, () => this.resetTimer());
+    this.setState(
+      {sessionLen: values.sessionLen, breakLen: values.breakLen}, 
+      () => {
+        this.resetTimer();
+        localStorage.setItem('sessionLen', values.sessionLen.toString());
+        localStorage.setItem('breakLen', values.breakLen.toString());
+      });
+  }
+
+  alert(type: string) {
+    // Notification
+    let img = require('../../images/clock.png');
+    let title = {session: 'Session Ended!', break: 'Session Ended!'};
+    let notes = {
+      session: {          
+        icon: img,
+        body: 'You should have a rest.',
+        vibrate: [200, 100, 200],
+      },
+      break: { 
+        icon: img, 
+        body: 'You should start to work.',
+        vibrate: [200, 100, 200],
+      }
+    };
+    let _notification = new Notification(title[type], notes[type]);
+    _notification.onclick = () => console.log('test');
     
+    // alert sound
+    let song = require('../../musics/alarm.mp3');
+    let audio = new Audio(song);
+    audio.play();
+    setTimeout(() => audio.pause(), 2000);
   }
 
   render() {

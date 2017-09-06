@@ -5,9 +5,9 @@
 - [x] Add normalize.css to make consistency between browsers
 - [x] basic css
 - [x] Timer
-- [ ] Notification
-- [ ] sound play
+- [x] Notification
+- [x] sound play
 - [ ] Offline PWA
-- [ ] LocalStorage
+- [x] LocalStorage
 - [x] Add github corner
 - [ ] Add unit test
