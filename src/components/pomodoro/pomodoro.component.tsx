@@ -320,7 +320,7 @@ class Pomodoro extends React.Component<{}, PomodoroState> {
     _notification.onclick = () => console.log('test');
     
     // alert sound
-    let song = require('../../musics/alarm.mp3');
+    let song = require('../../media/alarm.mp3');
     let audio = new Audio(song);
     audio.play();
     setTimeout(() => audio.pause(), 2000);
