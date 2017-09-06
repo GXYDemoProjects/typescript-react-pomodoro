@@ -11,6 +11,7 @@
     "npm-run-all": "^4.1.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-github-corner": "^1.0.0",
     "react-scripts-ts": "2.6.0"
   },
   "scripts": {

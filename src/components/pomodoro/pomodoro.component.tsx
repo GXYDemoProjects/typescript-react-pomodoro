@@ -1,4 +1,5 @@
 import * as React from 'react';
+import GithubCorner from 'react-github-corner';
 import '../../styles/pomodoro.css';
 
 export interface ClickFunc {
@@ -307,8 +308,13 @@ class Pomodoro extends React.Component<{}, PomodoroState> {
       initLen: state.sessionLen,
     };
 
-    return (
+    return ( 
       <div className="Pomodoro">
+        <GithubCorner 
+          href="https://github.com/GuoXiaoyang/typescript-react-pomodoro"
+          bannerColor="#1082A5"
+          octoColor="#272727"
+        />
         <div className="Pomodoro-header">
           <h2>Pomodoro Clock</h2>
         </div>
