@@ -7,7 +7,7 @@
 - [x] Timer
 - [x] Notification
 - [x] sound play
-- [ ] Offline PWA
+- [x] Offline PWA
 - [x] LocalStorage
 - [x] Add github corner
-- [ ] Add unit test
+- [x] Basic test
