@@ -211,7 +211,7 @@ class Pomodoro extends React.Component<{}, PomodoroState> {
     this.state = {
       sessionLen: sessionLen,
       breakLen: breakLen,
-      time: 0,
+      time: sessionLen * 60,
       play: false,
       type: 'session',
     };
