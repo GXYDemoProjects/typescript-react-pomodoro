@@ -316,14 +316,23 @@ class Pomodoro extends React.Component<{}, PomodoroState> {
         vibrate: [200, 100, 200],
       }
     };
-    let _notification = new Notification(title[type], notes[type]);
-    _notification.onclick = () => console.log('test');
+    try {   
+      let _notification = new Notification(title[type], notes[type]);
+      _notification.onclick = () => console.log('test');
+    } catch (error) {
+      console.log('Notification Error:', error);
+    }
     
     // alert sound
-    let song = require('../../media/alarm.mp3');
-    let audio = new Audio(song);
-    audio.play();
-    setTimeout(() => audio.pause(), 2000);
+    try {
+      
+      let song = require('../../media/alarm.mp3');
+      let audio = new Audio(song);
+      audio.play().catch(err => console.log('Play Error:', err));
+      setTimeout(() => audio.pause(), 2000);
+    } catch (error) {
+      console.log('Audio Error:', error);
+    }
   }
 
   render() {
