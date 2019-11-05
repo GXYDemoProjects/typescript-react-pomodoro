@@ -16,4 +16,4 @@
 Currently it has a bug on the mobile browser.
 The Notification API is deprecated on the web. I use error catching to avoid failures on the mobile.
 
-[Sample is here.](https://guoxiaoyang.github.io/typescript-react-pomodoro/)
+[Sample is here.](https://gxydemoprojects.github.io/typescript-react-pomodoro/)
