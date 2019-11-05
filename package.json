@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GuoXiaoyang/typescript-react-pomodoro.git"
+    "url": "git+https://github.com/GXYDemoProjects/typescript-react-pomodoro.git"
   },
   "keywords": [
     "Pomodoro"
@@ -33,7 +33,7 @@
   "author": "guoxiaoyang",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/GuoXiaoyang/typescript-react-pomodoro/issues"
+    "url": "https://github.com/GXYDemoProjects/typescript-react-pomodoro/issues"
   },
   "homepage": ".",
   "devDependencies": {
